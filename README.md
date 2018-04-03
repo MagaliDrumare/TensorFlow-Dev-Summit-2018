@@ -1,7 +1,7 @@
 ## Tensorflow dev Summit 2018 videos 
 - https://goo.gl/o4PC4H
 
-## Notes on TensorFlow 20 videos of the Summit : 
+## Notes on the videos of the TensorFlow Summit : 
 - https://goo.gl/B9JT64
 
 ## Google’s TensorFlow AI framework adds Swift and JavaScript support
