@@ -1,0 +1,433 @@
+
+video 1 : Tensorflow Keynote 
+https://youtu.be/kSa3UObNS6o
+
+# Main ideas : 
+
+-> Tensorflow at the core of machine learning project in different sector of activities: industry, agricultural, commerce. 
+
+-> Increasing popularity : 11.000.000 download in 2017
+	-> Tensorflow on Medium : https://medium.com/tensorflow 
+	-> new tensorflow blog : blog.tensorflow.org 
+	-> new toutube channel : youtube.com/tensorflow 
+	-> Tensorflow Hub : pre-trained component easily to use with a single line of code. 
+	-> Machine learning crash course. 
+
+-> Main goal :made tensorflow easy to use. 
+	-> Define and compile models in Keras for a single machine 
+	-> Use Estimators TPU : each Cloud TPU provides up to 180 teraflops of performance, providing the computational power to train and run cutting-edge machine learning models
+	-> TPU available in beta cloude.google.com/tpu
+	-> github.com/tensorflow/tpu 
+
+ -> For mobile : use of Tensorflow Lite 
+ 
+ ->Tensorflow runs in many languages : new swift (Ios development), new tensorflow.js (javascript). 
+
+-> Tensorflow collaboration to increase performance : Intel, Nvidia, Telsla. 
+
+-> Engineer the tools for scientific discovery : AutoML 
+Controller proposes ML models and iterate to find the most accurate model. 
+
+-> Advance Health informatics : predictive tasks, no invasive test to prevent hearh risk. The paper: scalable and accurate deep learning for electronic health Keynote (TensorFlow Dev Summit 2018) https://arxiv.org/pdf/1801.07860.pdf
+
+-> Crops in Africa : image detection of leaves desease. 
+
+--------------------------
+
+video 2 : tf.data: Fast, flexible, and easy-to-use input pipelines (TensorFlow Dev Summit 2018)
+https://www.youtube.com/watch?v=uIcqeP7MFH0&index=2&list=PLQY2H8rRoyvxjVx3zfw4vA4cvlKogyLNN
+
+# Main ideas : 
+-> Input pipeline : improve input data. 
+
+-> ETL 
+	-> ETL for Tensorflow : Extract, Transform, Load. 
+	-> The performance guide helps to increase the ETL Process. 
+	www.tensorflow.org/performance/datasets_performance
+
+-> Performance : processing >13,000 images/ second with tf.data
+
+--------------------------
+
+video 3 : Eager Execution 
+https://www.youtube.com/watch?v=T8AW0fKP0Hs&index=3&list=PLQY2H8rRoyvxjVx3zfw4vA4cvlKogyLNN
+
+# Online tutorial about Eager Execution 
+https://youtu.be/T8AW0fKP0Hs
+
+# Main ideas: 
+-> Eager Execution, which provides a simpler, more intuitive interface to TensorFlow. This interface is more "Pythonic" and does away with the distinction between constructing and executing computational graphs.
+
+->Immediate execution of the graph with tensorflow 1.7
+import tensorflow as tf
+tf.enable_eager_execution()
+a=tf.constant([[2.0,3.0],[4.0,5.0]])
+print(tf.matmul(a,a))
+tf.Tensor(
+[[16. 21.]
+ [28. 37.]], shape=(2, 2), dtype=float32)
+
+ -> models with eager execition code : goo.gl/RTHJa5
+
+ -> to read : TensorFlow meets PyTorch with Eager execution.
+ https://medium.com/@yaroslavvb/tensorflow-meets-pytorch-with-eager-mode-714cce161e6c
+
+
+--------------------------
+
+video 4 : Machine Learning in JavaScript (TensorFlow Dev Summit 2018)
+https://youtu.be/YB-kfeNIPCE
+
+# Medium article : https://medium.com/tensorflow/introducing-tensorflow-js-machine-learning-in-javascript-bf3eab376db
+-> Code on GitHUb : https://github.com/tensorflow/tfjs-examples
+
+# Main ideas: 
+-> Tensorflow Playground : https://goo.gl/dowYUQ
+in browser visualization of a neural network
+-> Browser : interactive, access to the sensors, data stay on the client. 
+-> deeplearn.js release in august 2017 allow inference and training entirely in the browser. 
+
+-> NEW IN 2018 : tensorflow.js website : https://js.tensorflow.org 
+
+-> Keras model and tensorflow saved model will be automatically  imported into the browser. 
+1/ Save the model (python)
+2 /Convert the model (python)
+3/ Load thanks (tensorflow.js)
+
+-> Browser has still is limitation. Work on Node.js
+
+--------------------------
+
+video 5 : Training Performance: A user’s guide to converge faster (TensorFlow Dev Summit 2018)
+https://youtu.be/SxOsJPaxHME
+
+# Main ideas : 
+
+-> How to optimize training speed of your models on modern accelerators (GPUs and TPUs).
+
+-> GPU, TPU accelerate the machine learning performance. But it's not enough need to optimize the code to increase the performance. 
+-> Goal: reduce the time, TPU is waiting for the input. 
+
+# Optimization of Phase 1 : Input Pipeline Performance 
+-> step 1 : add num_parallel_cells = 64 to parallelize across many cores. 
+dataset= dataset.map(parser_fn, num_parallel_cells=64)
+result of the optimization => processing more 600 images per second
+
+-> step 2 : Input pipeline with software pipelining 
+To Avoid CPU Idle, Accelerator Idle : use software pipelining
+Extract for step 5
+Transform for step 4
+Load data for step 3 
+Training for step 2 
+	-> dataset = tf.data.TFRecordDataset(files,
+	num_parallell_read = 32) 
+	-> dataset=dataset.prefetch(2)
+result of the optimization => processing more 1750 images per second
+
+-> Work in progress on distributed storage of the data. 
+
+# Optimization of Phase 2 : Forward and Backwards Passes
+-> Lot of hardware and difficult to find common optimization. 
+-> Floating point formats optimization : fp16 and bfloat16
+Floating Point numbers : https://youtu.be/PZRI1IfStY0
+-> matrix operations optimization (TPUv2 chip-systollic array)
+
+# Optimization of Phase 3 : Gradient optimization 
+-> TPU : Wrap your optimizer with CrossShardOptimizer
+when using TPU, wrap optimizer with CrossShardOptimizer which handles synchronization details between different TPU cores. 
+optimizer=tpu_optimizer.CrossShardOptimizer(optimizer)
+
+#Mesuring performance : 
+-> Becareful benchmarks are not serious! 
+-> Best practice for benchmark : Stanford DawnBench 
+https://dawn.cs.stanford.edu/benchmark/
+-> Nvidia DGX-1 / Google Cloud TPU
+
+Future : Datasets Auto-Tuning 
+-> Phase 1: Tensorflow will optimize the input pipleline with datasets auto-tuning. 
+-> Phase 2 : Working to optimize on device performances with two frameworks XLA and Grappler : automatically re-write the models to optimize the training on certain platfo rms. 
+
+-> Input Pipeline performance Guide : https://www.tensorflow.org/versions/master/performance/datasets_performance
+--------------------------
+
+video 6 : The Practitioner's Guide with TF High Level APIs (TensorFlow Dev Summit 2018)
+https://youtu.be/4oNdaQk0Qv4
+
+# Main ideas: 
+-> pre-made Tensorflow Estimators <=> models provided by Google 
+best way to focus on experiment and data (example : DNN Classifier)
+
+-> Estimators--a high-level TensorFlow API that greatly simplifies machine learning programming. Estimators encapsulate the following actions:
+	->training
+	->evaluation
+	->prediction
+	->export for serving
+https://www.tensorflow.org/programmers_guide/estimators
+
+--------------------------
+
+video 7 : Distributed TensorFlow (TensorFlow Dev Summit 2018)
+https://youtu.be/-h0cWBiQ8s8
+
+
+# Main ideas : 
+
+-> Distributed Training Architectures 
+Single GPU 
+Multi-GPU: replicate the model on each GPU
+Multi node, Multi-GPU 
+
+-> Use estimator with multi-GPU
+-New Distribution stategy API : MirroredStrategy
+	-Replicate the model on # GPU. 
+	-Implement All-reduce communication between GPU: reduce values and distribute results to all processes. 
+	-Synchronous training. 
+
+--------------------------
+
+video 8 : Debugging TensorFlow with TensorBoard plugins (TensorFlow Dev Summit 2018)
+https://youtu.be/XcHWLsVmHvk
+
+#Main ideas : 
+
+-> Tensorboard : https://www.tensorflow.org/programmers_guide/summaries_and_tensorboard
+
+-> Few pluggins developped on tensorboard : 
+	-> Scalar dashboard : Tensorboard use to check if the model is converging. (loss, accuracy)
+	-> Embedding projector : visualizing embeddings.
+	-> Beholder pluggin : real time training visualization. 
+	-> TPU pluggin : optimize the use of TPU. 
+
+
+-> Tensorboard use to debbug XRAY 
+	-> instruction in the console : $tensorboard --logdir /tag/logdir --debugger port 7000
+	-> adress in the web browser localhost:6006/#debugger
+
+--------------------------
+
+video 9 : TensorFlow Lite (TensorFlow Dev Summit 2018)
+https://youtu.be/FAMfy7izB6A
+
+# Main ideas: 
+
+-> Tensorflow Lite is a lightweight library that includes associated tools for on-device machine learning on Android, iOS, or smaller devices.
+
+-> Trained Tensorflow model >> Converter (to TensorFlow Lite Format) >> Mobile device (Androïd, IosApp, Linux-Rasberry Pi)
+alernative for Ios : use CoreML. 
+
+-> Future : Quantization at training time. (instead of current floating point)
+https://www.tensorflow.org/performance/quantization
+	-> Quantization techniques store and calculate numbers in more compact formats. TensorFlow Lite adds quantization that uses an 8-bit fixed point representation.
+	-> Using 8-bit calculations help your models run faster and use less power. This is especially important for mobile devices and embedded applicationsthat can't run floating point code efficiently, for example, Internet of Things (IoT) and robotics devices. 
+	-> Challenge : maintain the accuracy of the models 
+
+-> Tensorflow Lite limited to inference (no training)
+
+--------------------------
+
+video 10 : Swift for TensorFlow - TFiwS (TensorFlow Dev Summit 2018)
+https://youtu.be/Yze693W4MaU
+
+# Main idea 
+
+->  Swift for TensorFlow (TFiwS) as an early stage open source project. It has many design advantages, and will be released with technical whitepaper, code, and an open design approach in April of this year. 
+
+-> Swift for TensorFlow is based on the belief that machine learning is important enough to deserve first-class language and compiler support.
+
+-> Graph building : explicitly build a graph and then execute it 
+	=> great for performance but not for usability 
+-> Eager execution : run tensor ops with interpreted code. 
+	=> more usability 
+-> New approach 'compiler analysis' mixing eager execution and graph with a graph builder. 
+
+-> New : Swift for tensorflow to combine the best of graph and eager. 
+
+-> swift.org : https://swift.org/
+
+--------------------------
+
+video 11 : Open Source Collaboration (TensorFlow Dev Summit 2018)
+https://youtu.be/nH6owuKfCbw
+
+# Main idea : 
+
+-> TensorFlow Community : https://www.tensorflow.org/community/welcome
+
+-> New set of mailing lists to help communication and coordination, the expansion of the SIG program (Build, Swift, JavaScript, TensorBoard and Rust), and previews the public RFC process (to come in April/May 2018).
+
+-> Developers mailing list 
+developers@tensorflow.org 
+sign up from tensorflow.org/community
+
+-> blog.tensorflow.org
+-> new youtube channel : https://www.youtube.com/channel/UC0rqucBdTuFTjJiefW5t-IQ
+
+
+--------------------------
+
+video 12 : TensorFlow Hub (TensorFlow Dev Summit 2018) 
+https://youtu.be/rirzJ-e68cw
+
+# Main idea  : 
+
+-> Tensorfow new Hub : https://www.tensorflow.org/hub/
+
+-> TF Hub, a new library built to foster the publication, discovery, and consumption of reusable parts of machine learning models. 
+
+-> Repository of modules, which are self-contained pieces of TensorFlow graphs that can be reused across different tasks. 
+
+-> Modules contain variables that have been pre-trained for a task using a large dataset. 
+
+-> By reusing a module on a related or similar task, a user can train a model with a smaller dataset, improve generalization, or simply speed up training.
+
+-> Re-Use of image classification or text classification models
+	-> Images Modules : https://www.tensorflow.org/hub/modules/image
+	-> Text modules : https://www.tensorflow.org/hub/modules/text
+	-> GAN Modules : https://www.tensorflow.org/hub/modules/other
+
+
+-> Example of code:  
+import tensorflow as tf
+import tensorflow_hub as hub
+
+with tf.Graph().as_default():
+  embed = hub.Module("https://tfhub.dev/google/nnlm-en-dim128-with-normalization/1")
+  embeddings = embed(["A long sentence.", "single-word", "http://example.com"])
+
+  with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    sess.run(tf.tables_initializer())
+
+    print(sess.run(embeddings))
+
+
+--------------------------
+
+video 13 : TensorFlow Extended (TFX) (TensorFlow Dev Summit 2018)
+https://youtu.be/vdG7uKQ2eKk
+
+# Main idea: 
+ 
+-> TFX is an end-to-end ML platform built around TensorFlow and first introduced to the public in a 2017 KDD paper. 
+
+-> Doing ML in production is hard. 
+TF.Transform (already open source)
+TF.Serving(already open source)
+TensorFlow Model Analysis (TFMA)
+will simplify this processus. 
+
+-> TF Transform => creation of a tf.Graph that replace "online processing". 
+
+-> Tensorflow model analysis : https://github.com/tensorflow/model-analysis. Chack that the data are not bias.  
+
+-> On the same subject : 
+	-> how to deploy a tensorflow model in production : https://www.youtube.com/watch?v=T_afaArR0E8
+	-> how to de a Keras model in production : https://www.youtube.com/watch?v=f6Bf3gl4hWY 
+
+
+--------------------------
+
+Applying TensorFlow to concrete problems 
+
+# Help Farmers 
+video 14 : TensorFlow: an ML platform for solving impactful and challenging problems
+https://youtu.be/NlpS-DhayQA
+ 	-> Researchers at PlantVillage (https://plantvillage.psu.edu/) of Penn State University 
+ 	and the International Institute of Tropical Agriculture (IITA) (http://www.iita.org/) are using ML and TensorFlow to help farmers detect diseases in Cassava plants
+
+# Coca Coca CRM (ConvNet)
+video 16 : Applied AI at The Coca-Cola Company (TensorFlow Dev Summit 2018)
+https://youtu.be/WIV6oUc2JOg
+	-> Coca-Cola built a custom Optical Character Recognition (OCR) capability using Convolutional Neural Networks and TensorFlow. 
+	-> This TensorFlow CNN is hosted online for web-based promotions and installed natively as a component of the Coca-Cola iPhone and Android apps.
+
+# Robot Learning (GAN)
+video 17 : Real-World Robot Learning (TensorFlow Dev Summit 2018)
+https://youtu.be/nQ1Ev9Inqco
+
+	-> GraspGAN : https://research.googleblog.com/2017/10/closing-simulation-to-reality-gap-for.html
+
+
+# Creating art and music, Magenta Project (Performance RNN,Music VAE) 
+video 18 : Project Magenta (TensorFlow Dev Summit 2018)
+https://youtu.be/lMJKhrqPYSw
+
+	-> https://magenta.tensorflow.org/
+
+
+# Physics : Reconstructing Fusion Plasmas (TensorFlow's distribution and tensorflow_probability libraries)
+video 19 : https://youtu.be/Bb1_zlrjo1c
+
+	-> Ian Langmore reconstructs plasma temperature, density, and B-field from measurements in partnership with tae.com. This is a Bayesian inverse problem, making use of TensorFlow's distribution and tensorflow_probability libraries
+
+	-> https://github.com/tensorflow/probability
+
+
+# Genomics : Nucleus: TensorFlow toolkit for Genomics
+video 20 : https://youtu.be/7wi9NdGh9oI
+
+	-> The launch of Nucleus, a library of Python code for reading, writing, and filtering common genomics file formats for conversion to TensorFlow examples. 
+
+	-> DeepVariant : https://research.googleblog.com/2017/12/deepvariant-highly-accurate-genomes.html 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
